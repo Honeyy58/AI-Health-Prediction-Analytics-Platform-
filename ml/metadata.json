@@ -1,0 +1,44 @@
+{
+  "model_type": "LogisticRegression",
+  "feature_names": [
+    "gender",
+    "age",
+    "hypertension",
+    "heart_disease",
+    "smoking_history",
+    "bmi",
+    "HbA1c_level",
+    "blood_glucose_level"
+  ],
+  "gender_map": {
+    "Female": 0,
+    "Male": 1,
+    "Other": 2
+  },
+  "smoking_map": {
+    "never": 0,
+    "No Info": 1,
+    "current": 2,
+    "former": 3,
+    "ever": 4,
+    "not current": 5
+  },
+  "metrics": {
+    "accuracy": 0.945,
+    "precision": 0.432,
+    "recall": 0.9249,
+    "f1_score": 0.5889,
+    "roc_auc": 0.9762
+  },
+  "coefficients": {
+    "gender": 0.07130249394494549,
+    "age": 0.4347530924981237,
+    "hypertension": 0.05655749037933636,
+    "heart_disease": 0.023829667342067106,
+    "smoking_history": -0.03936686822522469,
+    "bmi": 0.45679680823715585,
+    "HbA1c_level": 1.3926812162079198,
+    "blood_glucose_level": 1.1316225521065044
+  },
+  "intercept": -2.9149115413472826
+}
