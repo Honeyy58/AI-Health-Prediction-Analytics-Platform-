@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
 import Navbar from './components/Navbar/Navbar';
@@ -83,6 +84,7 @@ function App() {
       <ToastProvider>
         <Router>
           <AppLayout />
+          <Analytics />
         </Router>
       </ToastProvider>
     </ThemeProvider>
