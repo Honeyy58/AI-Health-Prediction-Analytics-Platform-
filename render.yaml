@@ -1,0 +1,40 @@
+services:
+  # ===================================================
+  # 1. FastAPI + Machine Learning Backend Web Service
+  # ===================================================
+  - type: web
+    name: ai-health-backend
+    runtime: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHONPATH
+        value: .
+      - key: ENVIRONMENT
+        value: production
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: DB_HOST
+        value: localhost
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_USER
+        value: root
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        value: health_prediction
+
+  # ===================================================
+  # 2. React + Vite Frontend (Render Static Site)
+  # ===================================================
+  - type: web
+    name: ai-health-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

@@ -91,6 +91,25 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* DATABASE STATUS WARNING */}
+      {analytics?.database_connected === false && (
+        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200 flex items-start space-x-3.5 text-xs sm:text-sm">
+          <Database className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <div className="font-semibold text-amber-950 dark:text-amber-100 flex items-center space-x-2">
+              <span>MySQL Database Offline / Unconnected</span>
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300">
+                Notice
+              </span>
+            </div>
+            <p className="text-amber-800/90 dark:text-amber-300/90 leading-relaxed">
+              ML predictions work normally! However, analytics and historical logs require a connected MySQL database. 
+              To persist data, update your password in <code className="px-1.5 py-0.5 rounded bg-amber-200/50 dark:bg-amber-900/40 font-mono text-[11px] font-semibold">backend/.env</code> and run <code className="px-1.5 py-0.5 rounded bg-amber-200/50 dark:bg-amber-900/40 font-mono text-[11px] font-semibold">./venv/bin/python backend/init_db.py</code>.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* EMPTY STATE HANDLING */}
       {!isLoading && total === 0 ? (
         <div className="py-20 px-6 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200/80 dark:border-slate-800/80 text-center space-y-4 max-w-xl mx-auto shadow-sm">

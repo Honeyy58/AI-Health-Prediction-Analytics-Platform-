@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Clock, RefreshCw, HeartPulse, ShieldAlert } from 'lucide-react';
+import { Clock, RefreshCw, HeartPulse, ShieldAlert, Database } from 'lucide-react';
 import PredictionTable from '../components/PredictionTable/PredictionTable';
 import healthApi from '../services/api';
 import { useToast } from '../context/ToastContext';
@@ -10,7 +10,9 @@ const History = () => {
     total: 0,
     page: 1,
     limit: 10,
-    totalPages: 1
+    totalPages: 1,
+    databaseConnected: true,
+    dbNotice: null
   });
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -36,7 +38,9 @@ const History = () => {
         total: res.total || 0,
         page: res.page || targetPage,
         limit: res.limit || 10,
-        totalPages: res.total_pages || 1
+        totalPages: res.total_pages || 1,
+        databaseConnected: res.database_connected !== false,
+        dbNotice: res.db_notice
       });
     } catch (err) {
       addToast(err.message || 'Failed to fetch prediction history records.', 'error');
@@ -103,6 +107,25 @@ const History = () => {
           <span>Refresh Records</span>
         </button>
       </div>
+
+      {/* DATABASE STATUS WARNING */}
+      {data.databaseConnected === false && (
+        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200 flex items-start space-x-3.5 text-xs sm:text-sm">
+          <Database className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <div className="font-semibold text-amber-950 dark:text-amber-100 flex items-center space-x-2">
+              <span>MySQL Database Offline / Unconnected</span>
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300">
+                Notice
+              </span>
+            </div>
+            <p className="text-amber-800/90 dark:text-amber-300/90 leading-relaxed">
+              Historical records are loaded from and saved to your MySQL database. 
+              To view audit history or save predictions, configure your database credentials in <code className="px-1.5 py-0.5 rounded bg-amber-200/50 dark:bg-amber-900/40 font-mono text-[11px] font-semibold">backend/.env</code> and run <code className="px-1.5 py-0.5 rounded bg-amber-200/50 dark:bg-amber-900/40 font-mono text-[11px] font-semibold">./venv/bin/python backend/init_db.py</code>.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Prediction History Table */}
       <PredictionTable

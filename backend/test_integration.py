@@ -70,6 +70,22 @@ def test_full_pipeline():
         assert r_bad.status_code == 422, f"Expected 422 for bad input #{i}, got {r_bad.status_code}"
     print(f"✓ All {len(bad_inputs)} bound and schema validation checks passed with 422 Unprocessable Content!")
 
+    # 5. Analytics Graceful Offline Behavior (Should return 200, not 503)
+    r_analytics = client.get("/analytics")
+    assert r_analytics.status_code == 200
+    analytics_data = r_analytics.json()
+    assert "total_predictions" in analytics_data
+    assert "database_connected" in analytics_data
+    print(f"✓ GET /analytics returned 200 gracefully! (database_connected={analytics_data['database_connected']})")
+
+    # 6. History Graceful Offline Behavior (Should return 200, not 503)
+    r_history = client.get("/predictions")
+    assert r_history.status_code == 200
+    history_data = r_history.json()
+    assert "items" in history_data
+    assert "database_connected" in history_data
+    print(f"✓ GET /predictions returned 200 gracefully! (database_connected={history_data['database_connected']})")
+
     print("ALL API INTEGRATION TESTS COMPLETED SUCCESSFULLY!")
 
 if __name__ == '__main__':
